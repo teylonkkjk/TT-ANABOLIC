@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TT ANABOLIC</title>
+    <!-- Incluindo o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Animação de Fade-in */
+        .form-container {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md form-container">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black text-yellow-400 uppercase tracking-wider mb-2">TT ANABOLIC</h1>
+            <h2 class="text-2xl font-bold text-gray-200">Acesse sua Conta</h2>
+        </div>
+
+        <!-- Container do Formulário -->
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-700">
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-5">
+                    <label for="email" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Email</label>
+                    <input type="email" id="email" name="email" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="senha" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Senha</label>
+                    <input type="password" id="senha" name="senha" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all" required>
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-300 transition-colors duration-300 uppercase tracking-wider">
+                    Entrar
+                </button>
+            </form>
+            
+            <div class="text-center mt-6">
+                <a href="{% url 'cadastro' %}" class="text-yellow-400 hover:text-yellow-300 font-semibold transition-colors">Não tenho uma conta</a>
+            </div>
+        </div>
+
+        <!-- Bloco de Mensagens do Django -->
+        {% if messages %}
+        <div class="mt-6">
+            {% for message in messages %}
+            <!-- A cor pode ser ajustada com base nas tags da mensagem (e.g., message.tags == 'error' -> bg-red-500) -->
+            <div class="bg-red-500 bg-opacity-20 border border-red-500 text-red-300 px-4 py-3 rounded-lg text-center" role="alert">
+                <p class="font-bold">{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

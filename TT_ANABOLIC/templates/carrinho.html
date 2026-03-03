@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load permission_tags %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <div class="relative text-center mb-12">
+        <a href="{% url 'home' %}" class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 text-gray-200 font-bold py-2 px-4 rounded-lg hover:bg-gray-600 hover:text-yellow-400 transition-colors duration-300 flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            <span>Voltar</span>
+        </a>
+        <h1 class="text-4xl font-black text-yellow-400 uppercase tracking-wider mb-2">Seu Carrinho</h1>
+        <p class="text-gray-300">Revise seus itens antes de finalizar o pedido.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Coluna de Itens -->
+        <div class="lg:col-span-2 bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
+            
+            <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
+                <h2 class="text-2xl font-bold">Itens no Pedido</h2>
+                {% if itens_carrinho %}
+                <a href="{% url 'limpar_carrinho' %}" class="text-sm font-medium text-red-500 hover:text-red-400 transition-colors flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                    <span>Esvaziar Carrinho</span>
+                </a>
+                {% endif %}
+            </div>
+            
+            <div class="space-y-6">
+                {% for item in itens_carrinho %}
+                <div class="flex items-center space-x-4 p-4 rounded-lg bg-gray-800">
+                    <div class="w-24 h-24 flex-shrink-0">
+                        <img src="{{ item.produto.imagem.url }}" alt="{{ item.produto.nome }}" class="w-full h-full object-cover rounded-md border-2 border-gray-700">
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg text-gray-100">{{ item.produto.nome }}</h3>
+                        <p class="text-sm text-gray-400">Preço Unidade: R$ {{ item.produto.preco }}</p>
+                        <p class="text-yellow-400 font-semibold mt-1 text-lg">Subtotal: R$ {{ item.subtotal }}</p>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center bg-gray-700 rounded-md border border-gray-600">
+                            <a href="{% url 'diminuir_quantidade' item.id %}" class="px-3 py-2 text-lg font-bold hover:bg-gray-600 rounded-l-md transition-colors">-</a>
+                            <span class="px-4 py-1 font-bold text-yellow-400">{{ item.quantidade }}</span>
+                            <a href="{% url 'aumentar_quantidade' item.id %}" class="px-3 py-2 text-lg font-bold hover:bg-gray-600 rounded-r-md transition-colors">+</a>
+                        </div>
+                        <a href="{% url 'remover_do_carrinho' item.id %}" class="text-red-500 hover:text-red-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-cart-x-fill mx-auto text-gray-600 mb-4" viewBox="0 0 16 16">
+                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7.354 5.646 8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207 7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5 6.646 6.354a.5.5 0 1 1 .708-.708z"/>
+                    </svg>
+                    <p class="text-gray-400 text-lg">Seu carrinho está vazio.</p>
+                    <a href="{% url 'home' %}" class="mt-4 inline-block bg-yellow-400 text-gray-900 font-bold py-2 px-6 rounded-lg hover:bg-yellow-300 transition-colors">
+                        Ver Produtos
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Coluna de Resumo do Pedido -->
+        {% if itens_carrinho %}
+        <div class="lg:col-span-1">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 sticky top-8">
+                <h2 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-4">Resumo do Pedido</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-gray-300">
+                        <span>Subtotal</span>
+                        <span>R$ {{ total_carrinho }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-300">
+                        <span>Frete</span>
+                        <span>A calcular</span>
+                    </div>
+                    <div class="flex justify-between text-white text-xl font-bold mt-4 pt-4 border-t border-gray-700">
+                        <span>Total</span>
+                        <span class="text-yellow-400">R$ {{ total_carrinho }}</span>
+                    </div>
+                </div>
+                
+                <a href="{% url 'checkout_endereco' %}" class="mt-8 w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-300 transition-colors duration-300 uppercase tracking-wider flex items-center justify-center space-x-2">
+                    <span>Finalizar Pedido</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

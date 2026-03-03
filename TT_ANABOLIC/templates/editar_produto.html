@@ -1,0 +1,83 @@
+{% load static %}
+{% load permission_tags %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produto - TT ANABOLIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <header class="bg-gray-800 border-b border-gray-700 shadow-lg sticky top-0 z-40">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="{% url 'home' %}" class="text-2xl font-black text-yellow-400 uppercase tracking-wider">
+                TT ANABOLIC
+            </a>
+            <div class="flex items-center space-x-6">
+                {% if user.is_authenticated %}
+                    {% if request.user|can:'cadastrar_produto' %}
+                    <a href="{% url 'cadastrar_produto' %}" class="text-yellow-400 hover:text-yellow-300 font-semibold transition-colors text-sm uppercase">
+                        + NOVO PRODUTO
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'carrinho' %}" class="text-gray-300 hover:text-yellow-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+                    </a>
+                    <a href="{% url 'logout' %}" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-500 transition-colors text-sm uppercase">Sair</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-gray-300 hover:text-yellow-400 font-semibold transition-colors">Login</a>
+                    <a href="{% url 'cadastro' %}" class="bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg hover:bg-yellow-300 transition-colors text-sm uppercase">Cadastrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-16">
+        <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-700">
+            <h1 class="text-4xl font-black text-center text-yellow-400 mb-8 uppercase">
+                Editar Produto
+            </h1>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">{{ field.label }}</label>
+                    
+                    {% if field.name == 'imagem' and produto.imagem %}
+                        <div class="flex items-center space-x-4 mb-2">
+                            <img src="{{ produto.imagem.url }}" alt="Imagem atual" class="h-16 w-16 object-cover rounded-md">
+                            <span class="text-gray-400 text-sm">Imagem atual. Envie um novo arquivo para substituir.</span>
+                        </div>
+                    {% endif %}
+
+                    {{ field }} {% if field.help_text %}
+                        <p class="mt-2 text-xs text-gray-400">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                
+                <div class="pt-6 flex items-center justify-end space-x-4">
+                    <a href="{% url 'home' %}" class="text-gray-400 hover:text-white font-bold transition-colors">Cancelar</a>
+                    <button type="submit" class="bg-yellow-400 text-gray-900 font-bold py-3 px-6 rounded-lg hover:bg-yellow-300 transition-colors uppercase tracking-wider">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

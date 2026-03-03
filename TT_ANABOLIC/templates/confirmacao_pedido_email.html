@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial, sans-serif; color: #333;">
+    <h2>Olá, {{ user.username }}!</h2>
+    <p>Obrigado por comprar na TT ANABOLIC. Recebemos o seu pedido <strong>#{{ pedido.id }}</strong>.</p>
+    <p>Assim que o pagamento for confirmado, iniciaremos o processo de envio.</p>
+    <hr>
+    <h3>Resumo do Pedido:</h3>
+    <ul>
+        {% for item in pedido.itens.all %}
+            <li>{{ item.produto.nome }} ({{ item.quantidade }}x) - R$ {{ item.subtotal|floatformat:2 }}</li>
+        {% endfor %}
+    </ul>
+    <h3><strong>Total: R$ {{ pedido.total|floatformat:2 }}</strong></h3>
+    <hr>
+    <p>Atenciosamente,<br>Equipe TT ANABOLIC</p>
+</body>
+</html>

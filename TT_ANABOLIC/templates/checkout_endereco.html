@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .form-container {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 15px 0px rgba(250, 204, 21, 0.4); }
+        50% { box-shadow: 0 0 25px 8px rgba(250, 204, 21, 0.2); }
+    }
+    .btn-pulse {
+        animation: pulseGlow 3s infinite ease-in-out;
+    }
+
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    .spinner {
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #60a5fa; 
+        animation: spin 0.5s linear infinite;
+    }
+    
+   
+    @keyframes animatedGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .animated-dark-bg {
+        background: linear-gradient(-45deg, #0c0a09, #18181b, #172554, #111827);
+        background-size: 400% 400%;
+        animation: animatedGradient 25s ease infinite;
+    }
+    
+ 
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+        border: 2px solid #60a5fa; /* Borda azul */
+        -webkit-text-fill-color: #60a5fa !important; /* Forca o texto azul */
+        -webkit-box-shadow: 0 0 0px 1000px #030712 inset !important; /* Forca o fundo preto */
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-background-clip: text;
+    }
+</style>
+
+<div class="animated-dark-bg min-h-screen text-gray-200">
+    <div class="container mx-auto px-4 pt-8 pb-16 sm:pb-24">
+        
+        <div class="max-w-xl mx-auto form-container">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-black text-yellow-400 uppercase tracking-wider" style="text-shadow: 0px 0px 10px rgba(250, 204, 21, 0.3);">
+                    LOCAL DE ENTREGA
+                </h1>
+                <p class="text-gray-400 mt-2 text-lg">
+                    INFORME OS DADOS PARA FINALIZAR A OPERAÇÃO.
+                </p>
+            </div>
+
+            <form method="POST" class="bg-gray-900/60 backdrop-blur-sm p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-700">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="bg-red-800/80 border border-red-600 text-red-200 px-4 py-3 rounded-lg mb-6" role="alert">
+                        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="space-y-6">
+                    <div class="relative">
+                        <label for="{{ form.cep.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">CEP</label>
+                        {{ form.cep }}
+                        <div id="cep-spinner" class="absolute top-10 right-3 h-5 w-5 rounded-full spinner hidden"></div>
+                        {% for error in form.cep.errors %}<p class="text-red-500 text-xs mt-1 animate-pulse">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.logradouro.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">Rua / Logradouro</label>
+                        {{ form.logradouro }}
+                        {% for error in form.logradouro.errors %}<p class="text-red-500 text-xs mt-1">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.numero.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">Número</label>
+                        {{ form.numero }}
+                        {% for error in form.numero.errors %}<p class="text-red-500 text-xs mt-1">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.bairro.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">Bairro</label>
+                        {{ form.bairro }}
+                        {% for error in form.bairro.errors %}<p class="text-red-500 text-xs mt-1">{{ error }}</p>{% endfor %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.cidade.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">Cidade</label>
+                        {{ form.cidade }}
+                        {% for error in form.cidade.errors %}<p class="text-red-500 text-xs mt-1">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.estado.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-300">Estado</label>
+                        {{ form.estado }}
+                        {% for error in form.estado.errors %}<p class="text-red-500 text-xs mt-1">{{ error }}</p>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-700">
+                    <button type="submit" class="w-full bg-yellow-400 text-gray-900 font-black py-3 px-4 rounded-lg hover:bg-green-300 focus:outline-none transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 uppercase text-lg tracking-wider btn-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16">
+                            <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.importante-.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.95-1.025-2.287-1.4-2.837-.855C9.552 1.29 8.5 1.5 8 1.5c-.5 0-1.552-.21-2.662-.41z"/>
+                            <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                        <span>Confirmar e Finalizar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const cepInput = document.getElementById('id_cep');
+    if (cepInput) {
+        const spinner = document.getElementById('cep-spinner');
+        const fields = {
+            logradouro: document.getElementById('id_logradouro'),
+            bairro: document.getElementById('id_bairro'),
+            cidade: document.getElementById('id_cidade'),
+            estado: document.getElementById('id_estado'),
+            numero: document.getElementById('id_numero')
+        };
+        cepInput.addEventListener('blur', function() {
+            const cep = cepInput.value.replace(/\D/g, '');
+            if (cep.length !== 8) return;
+            spinner.classList.remove('hidden');
+            Object.values(fields).forEach(field => field.setAttribute('disabled', true));
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        fields.logradouro.value = data.logradouro;
+                        fields.bairro.value = data.bairro;
+                        fields.cidade.value = data.localidade;
+                        fields.estado.value = data.uf;
+                        fields.numero.focus();
+                    } else {
+                        Object.values(fields).forEach(field => { field.value = ''; });
+                    }
+                })
+                .catch(error => { console.error("Erro ao buscar CEP:", error); })
+                .finally(() => {
+                    spinner.classList.add('hidden');
+                    Object.values(fields).forEach(field => field.removeAttribute('disabled'));
+                });
+        });
+    }
+</script>
+{% endblock %}

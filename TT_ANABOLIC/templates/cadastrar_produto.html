@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %} <body class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-16">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-black text-yellow-400 uppercase tracking-wider mb-2">Cadastrar Novo Produto</h1>
+                <p class="text-gray-300">Preencha os dados abaixo para adicionar um item à loja.</p>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" class="bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label for="{{ form.nome.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Nome</label>
+                    {{ form.nome }}
+                </div>
+
+                <div>
+                    <label for="{{ form.descricao.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Descrição</label>
+                    {{ form.descricao }}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="{{ form.preco.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Preço (R$)</label>
+                        {{ form.preco }}
+                    </div>
+                    <div>
+                        <label for="{{ form.quantidade.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Quantidade</label>
+                        {{ form.quantidade }}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="{{ form.imagem.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 uppercase tracking-wider">Imagem do Produto</label>
+                    {{ form.imagem }}
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-300 transition-colors duration-300 uppercase tracking-wider">
+                        Salvar Produto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock %}
