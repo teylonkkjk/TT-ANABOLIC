@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - TT ANABOLIC</title>
-    <!-- Incluindo o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +13,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Animação de Fade-in */
         .form-container {
             animation: fadeIn 0.8s ease-in-out;
         }
@@ -64,11 +62,9 @@
             </div>
         </div>
 
-        <!-- Bloco de Mensagens do Django -->
         {% if messages %}
         <div class="mt-6">
             {% for message in messages %}
-            <!-- A cor pode ser ajustada com base nas tags da mensagem (e.g., message.tags == 'error' -> bg-red-500) -->
             <div class="bg-red-500 bg-opacity-20 border border-red-500 text-red-300 px-4 py-3 rounded-lg text-center" role="alert">
                 <p class="font-bold">{{ message }}</p>
             </div>

@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crie sua Conta - TT ANABOLIC</title>
-    <!-- Incluindo o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +38,6 @@
             <h2 class="text-2xl font-bold text-gray-200">Crie sua Conta</h2>
         </div>
 
-        <!-- Container do Formulário -->
         <div class="bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-700">
             <form action="{% url 'cadastro' %}" method="POST">
                 {% csrf_token %}

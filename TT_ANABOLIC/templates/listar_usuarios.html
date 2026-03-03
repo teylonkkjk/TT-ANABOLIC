@@ -24,7 +24,6 @@
                         {% if usuario.is_superuser %}
                             <span class="px-3 py-1 text-xs font-bold text-gray-900 bg-yellow-400 rounded-full">Admin Master</span>
                         
-                        {# ### LÓGICA CORRIGIDA AQUI ### #}
                         {% elif usuario.is_staff %}
                             <span class="px-3 py-1 text-xs font-bold text-white bg-green-600 rounded-full">Admin</span>
                         {% else %}
@@ -36,7 +35,6 @@
                             <form action="{% url 'gerenciar_admin' usuario.id %}" method="POST" class="inline-block">
                                 {% csrf_token %}
                                 
-                                {# ### LÓGICA CORRIGIDA AQUI ### #}
                                 {% if usuario.is_staff %}
                                     <button type="submit" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-500 transition-colors text-sm">
                                         Remover Admin

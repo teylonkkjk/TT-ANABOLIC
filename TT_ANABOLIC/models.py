@@ -23,8 +23,6 @@ class Produto (models.Model):
         ]
     def __str__(self):
         return self.nome
-    def __str__(self):
-        return self.nome
 
 class Carrinho(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
@@ -48,8 +46,6 @@ class Pedido(models.Model):
         ('finalizado', 'Finalizado'),
         ('cancelado', 'Cancelado'),
     )
-    
-    # Vincula o pedido a um usuário
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -59,7 +55,6 @@ class Pedido(models.Model):
         return f"Pedido #{self.id} - {self.usuario.username}"
     
 class ItemPedido(models.Model):
-    # Vincula este item a um Pedido específico
     pedido = models.ForeignKey(Pedido, related_name='itens', on_delete=models.CASCADE)
     # Vincula ao produto, mas impede que o produto seja deletado se estiver em um pedido
     produto = models.ForeignKey('Produto', on_delete=models.PROTECT)
@@ -75,7 +70,7 @@ class ItemPedido(models.Model):
         return self.quantidade * self.preco_unitario
 
 class Administrador(AbstractUserRole):
-    role_name = 'administradores' # Nome que usamos no código
+    role_name = 'administradores' 
     available_permissions = {
         'cadastrar_produto': True,
         'editar_produto': True,
@@ -84,7 +79,7 @@ class Administrador(AbstractUserRole):
 
 class UsuarioComum(AbstractUserRole):
     role_name = 'usuario_comum'
-    available_permissions = {} # Sem permissoees especiais
+    available_permissions = {} 
     
 class Endereco(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)

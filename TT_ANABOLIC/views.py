@@ -58,7 +58,6 @@ def home(request):
 def adicionar_carrinho(request, id):
     produto = get_object_or_404(Produto, id=id)
     carrinho, _ = Carrinho.objects.get_or_create(usuario=request.user.usuario)
-    # Tenta encontrar o item no carrinho. Se não existir, cria com quantidade 0.
     item_carrinho, created = ItensCarrinho.objects.get_or_create(
         carrinho=carrinho,
         produto=produto,
@@ -162,15 +161,11 @@ def diminuir_quantidade(request, item_id):
 @transaction.atomic
 def finalizar_pedido(request):
     carrinho_itens = ItensCarrinho.objects.filter(carrinho__usuario=request.user.usuario)
-
     if not carrinho_itens.exists():
         messages.error(request, 'Seu carrinho está vazio.')
         return redirect('carrinho')
-
     pedido = Pedido.objects.create(usuario=request.user, status='finalizado')
-    
     total_pedido = 0
-
     for item_carrinho in carrinho_itens:
         produto = item_carrinho.produto
         
