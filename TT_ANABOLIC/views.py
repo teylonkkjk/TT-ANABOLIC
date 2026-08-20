@@ -1,4 +1,3 @@
-# TT_ANABOLIC minhas views/ importaçoes
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout, authenticate, login 
 from django.contrib import messages
@@ -15,7 +14,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 def cadastro(request):
     if request.method == 'POST':
-        nome = request.POST.get('nome')
+        nome = request.POST.get('nome') 
         email = request.POST.get('email')
         senha = request.POST.get('senha')
         data_nascimento = request.POST.get('data_nascimento')
@@ -51,7 +50,7 @@ def login_view(request):
 
 @login_required
 def home(request):
-    produtos = Produto.objects.all()
+    produtos = Produto.objects.all() 
     return render(request, "home.html", {"produtos": produtos})
 
 @login_required
@@ -63,8 +62,6 @@ def adicionar_carrinho(request, id):
         produto=produto,
         defaults={'quantidade': 0}
     )
-
-    # Verifica se a quantidade no carrinho + 1 não excede o estoque total.
     if produto.quantidade > item_carrinho.quantidade:
         item_carrinho.quantidade += 1
         item_carrinho.save()
@@ -100,7 +97,7 @@ def remover_do_carrinho(request, id):
         messages.error(request, "Você não tem permissão para remover este item.")
     return redirect('carrinho')
 
-@login_required
+@login_required 
 @has_permission_decorator('cadastrar_produto')
 def cadastrar_produto_view(request):
     if request.method == 'POST':
@@ -171,9 +168,8 @@ def finalizar_pedido(request):
         
         if produto.quantidade < item_carrinho.quantidade:
             messages.error(request, f'Estoque insuficiente para {produto.nome}.')
-            transaction.set_rollback(True)
+            transaction.set_rollback(True) 
             return redirect('carrinho')
-
         produto.quantidade -= item_carrinho.quantidade
         produto.save()
 
@@ -185,7 +181,6 @@ def finalizar_pedido(request):
         )
         
         total_pedido += item_carrinho.subtotal() 
-
     pedido.total = total_pedido
     pedido.save()
 
@@ -209,9 +204,7 @@ def ver_perfil(request):
 
 @login_required
 def limpar_carrinho(request):
-    # Filtra os ItensCarrinho onde o carrinho pertence ao usuario logado
     ItensCarrinho.objects.filter(carrinho__usuario=request.user.usuario).delete()
-    
     messages.success(request, 'Seu carrinho foi esvaziado com sucesso!')
     return redirect('carrinho')
 def is_superuser(user):
@@ -220,10 +213,9 @@ def is_superuser(user):
 
 @user_passes_test(is_superuser, login_url='/login/')
 def listar_usuarios(request):
-    #Exibe a pagina de gerenciamento com todos os usuarios
     usuarios = User.objects.all().order_by('username')
     return render(request, 'listar_usuarios.html', {'usuarios': usuarios})
-
+ #Exibe a pagina de gerenciamento com todos os usuarios
 
 
 @user_passes_test(is_superuser, login_url='/login/')
@@ -314,12 +306,9 @@ def admin_pedidos(request):
 @transaction.atomic
 def finalizar_pedido(request):
     carrinho_itens = ItensCarrinho.objects.filter(carrinho__usuario=request.user.usuario)
-
     if not carrinho_itens.exists():
         messages.error(request, 'Seu carrinho está vazio.')
         return redirect('carrinho')
-
-
     pedido = Pedido.objects.create(usuario=request.user, status='finalizado')
     total_pedido = 0
     for item_carrinho in carrinho_itens:
