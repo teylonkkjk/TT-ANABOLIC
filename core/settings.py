@@ -22,7 +22,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(0jrcgs23o#3!k#$pfegp+5qpu%n5x3164k=&6st!yikn7-8_%'
+SECRET_KEY = 'django-insecure-dqguiqrgfbeqwjrfhwefabdfqewfifvq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'TT_ANABOLIC',
-        'USER': 'postgres',
-        'PASSWORD': 'tilon123',
-        'HOST': 'localhost',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
         }
 }
 
@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CONFIGURAÇÃO DE EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = ''
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'oteylon84@gmail.com'  # Coloque seu email do Gmail aqui
+EMAIL_HOST_USER = ''  # Coloque seu email do Gmail aqui
 EMAIL_HOST_PASSWORD = os.environ.get('TT_ANABOLIC') # Crie uma variável de ambiente com sua senha de app
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

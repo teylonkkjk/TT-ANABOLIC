@@ -179,13 +179,10 @@ def finalizar_pedido(request):
             quantidade=item_carrinho.quantidade,
             preco_unitario=produto.preco
         )
-        
         total_pedido += item_carrinho.subtotal() 
     pedido.total = total_pedido
     pedido.save()
-
     carrinho_itens.delete()
-
     messages.success(request, 'Seu pedido foi finalizado com sucesso!')
     return redirect('perfil')
 
@@ -208,14 +205,14 @@ def limpar_carrinho(request):
     messages.success(request, 'Seu carrinho foi esvaziado com sucesso!')
     return redirect('carrinho')
 def is_superuser(user):
-    #Funçao de teste que verifica se o usuário é um Superusuario
+    
     return user.is_superuser
 
 @user_passes_test(is_superuser, login_url='/login/')
 def listar_usuarios(request):
     usuarios = User.objects.all().order_by('username')
     return render(request, 'listar_usuarios.html', {'usuarios': usuarios})
- #Exibe a pagina de gerenciamento com todos os usuarios
+
 
 
 @user_passes_test(is_superuser, login_url='/login/')
@@ -286,10 +283,6 @@ def gerenciar_admin(request, user_id):
 
 @user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def admin_pedidos(request):
-    """
-    Exibe uma página para administradores com a lista de todos os pedidos de todos os clientes
-    """
-
     todos_pedidos = Pedido.objects.all().order_by('-data_criacao').prefetch_related(
         'usuario__usuario',  
         'itens', 
@@ -341,9 +334,9 @@ def finalizar_pedido(request):
         send_mail(
             subject,
             'Seu pedido foi confirmado!', 
-            settings.DEFAULT_FROM_EMAIL, # Remetente
-            [request.user.email], # Destinatário
-            html_message=html_message, # Mensagem em HTML
+            settings.DEFAULT_FROM_EMAIL, 
+            [request.user.email], 
+            html_message=html_message, 
             fail_silently=False,
         )
     except Exception as e:

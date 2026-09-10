@@ -56,19 +56,14 @@ class Pedido(models.Model):
     
 class ItemPedido(models.Model):
     pedido = models.ForeignKey(Pedido, related_name='itens', on_delete=models.CASCADE)
-    # Vincula ao produto, mas impede que o produto seja deletado se estiver em um pedido
     produto = models.ForeignKey('Produto', on_delete=models.PROTECT)
     quantidade = models.PositiveIntegerField()
-    # Guarda o preço no momento da compra, para o caso do preço do produto mudar depois
     preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
-
     def __str__(self):
         return f"{self.quantidade}x {self.produto.nome} no Pedido #{self.pedido.id}"
-
     @property
     def subtotal(self):
         return self.quantidade * self.preco_unitario
-
 class Administrador(AbstractUserRole):
     role_name = 'administradores' 
     available_permissions = {
@@ -89,6 +84,5 @@ class Endereco(models.Model):
     bairro = models.CharField(max_length=100)
     cidade = models.CharField(max_length=100)
     estado = models.CharField(max_length=2)
-    
     def __str__(self):
         return f"Endereço de {self.usuario.username}"
